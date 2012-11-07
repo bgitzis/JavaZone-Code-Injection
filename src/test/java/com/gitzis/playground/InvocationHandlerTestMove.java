@@ -8,9 +8,7 @@ public class InvocationHandlerTestMove {
 		new InvocationHandler() {
 
 			public Object invoke(Object arg0, Method arg1, Object[] arg2) throws Throwable {
-				// TODO Auto-generated method stub
 				return null;
-
 			}
 		};
 
