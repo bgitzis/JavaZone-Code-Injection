@@ -3,7 +3,7 @@ package com.gitzis.playground;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-public class InvocationHandlerTest {
+public class InvocationHandlerTestMove {
 	public void testInvocationHandler() throws Exception {
 		new InvocationHandler() {
 
