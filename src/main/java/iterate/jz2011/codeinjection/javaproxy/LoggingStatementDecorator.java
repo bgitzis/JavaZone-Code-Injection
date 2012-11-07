@@ -11,10 +11,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Remember values passed into a {@link PreparedStatement} via setString etc. for later logging.
- *
- * Source: http://theholyjava.wordpress.com/2009/05/23/a-logging-wrapper-around-prepareds/
- * (partly adjusted)
+ * Remember values passed into a {@link PreparedStatement} via setString etc.
+ * for later logging.
+ * 
+ * Source: http://theholyjava.wordpress.com/2009/05/23/a-logging-wrapper-around-
+ * prepareds/ (partly adjusted)
  */
 class LoggingStatementDecorator implements InvocationHandler {
 
@@ -24,11 +25,11 @@ class LoggingStatementDecorator implements InvocationHandler {
 	private int successfulBatchCounter = 0;
 
 	private LoggingStatementDecorator(PreparedStatement target) {
-		if (target == null) throw new IllegalArgumentException("'target' can't be null.");
+		if (target == null)
+			throw new IllegalArgumentException("'target' can't be null.");
 		this.target = target;
 	}
 
-	@Override
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
 
@@ -48,23 +49,28 @@ class LoggingStatementDecorator implements InvocationHandler {
 		if (cause instanceof BatchUpdateException) {
 			int failedBatchNr = successfulBatchCounter + 1;
 			Logger.getLogger("JavaProxy").warning(
-					"THE INJECTED CODE SAYS: " +
-					"Batch update failed for batch# " + failedBatchNr +
-					" (counting from 1) with values: [" +
-					getValuesAsCsv() + "]. Cause: " + cause.getMessage());
+					"THE INJECTED CODE SAYS: "
+							+ "Batch update failed for batch# " + failedBatchNr
+							+ " (counting from 1) with values: ["
+							+ getValuesAsCsv() + "]. Cause: "
+							+ cause.getMessage());
 		}
 	}
 
 	/**
-	 * Store set* arguments, reset batch number etc as appropriate for the current type of call.
+	 * Store set* arguments, reset batch number etc as appropriate for the
+	 * current type of call.
 	 */
 	private void updateLog(Method method, Object[] args) {
-		// All the interesting set<Something> methods have the signature: (int index, Something value [, ...])
+		// All the interesting set<Something> methods have the signature: (int
+		// index, Something value [, ...])
 		if (method.getName().startsWith("setNull")
-				&& (args.length >=1 && Integer.TYPE == method.getParameterTypes()[0] ) ) {
+				&& (args.length >= 1 && Integer.TYPE == method
+						.getParameterTypes()[0])) {
 			handleSetSomething((Integer) args[0], null);
 		} else if (method.getName().startsWith("set")
-				&& (args.length >=2 && Integer.TYPE == method.getParameterTypes()[0] ) ) {
+				&& (args.length >= 2 && Integer.TYPE == method
+						.getParameterTypes()[0])) {
 			handleSetSomething((Integer) args[0], args[1]);
 		} else if ("addBatch".equals(method.getName())) {
 			handleAddBatch();
@@ -92,7 +98,9 @@ class LoggingStatementDecorator implements InvocationHandler {
 		return batch;
 	}
 
-	public PreparedStatement getTarget() { return target; }
+	public PreparedStatement getTarget() {
+		return target;
+	}
 
 	/** Values as comma-separated values. */
 	public String getValuesAsCsv() {
